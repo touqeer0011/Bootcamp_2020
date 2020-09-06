@@ -1,0 +1,32 @@
+# This is a basic workflow to help you get started with Actions
+
+name: DEPLOY
+
+
+on:
+  push:
+    branches: [ master ]
+ 
+jobs:   
+  build:   
+    runs-on: ubuntu-latest
+
+    
+    steps:     
+    - uses: actions/checkout@v2
+      
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2-beta
+      with:
+         version: 12
+    - name: GitHub Action for Yarn 
+      uses: Borales/actions-yarn@v2.3.0
+      with:
+        cmd: install 
+     -name: creating build
+      run: yarn build 
+     -name: installing surge
+      run: npm install -g surge     
+     -name: Deploying on surge
+      run:  surge ./build http://mixed-flight.surge.sh/ --token ${{secrets.SURGE_token}}
+      
